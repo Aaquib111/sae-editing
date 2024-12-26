@@ -1,19 +1,29 @@
+#
+extensions=(
+    mikoz.black-py         
+    GitHub.copilot       
+    GitHub.copilot-chat
+    ms-toolsai.jupyter
+    ms-toolsai.vscode-jupyter-cell-tags
+    ms-toolsai.vscode-jupyter-slideshow
+    ms-python.vscode-pylance
+    ms-python.python
+    ms-python.debugpy
+)
+
+# Install each extension
+for extension in "${extensions[@]}"; do
+    echo "Installing $extension..."
+    code --install-extension "$extension" --force
+done
+
+echo "All extensions installed successfully!"
+
+cd ~/
 python -m venv venv
 source venv/bin/activate
+cd ~/sae-editing/
 pip install -r requirements.txt
+sudo apt-get install python-tk python3-tk tk-dev
 
-echo "Setting up VSCode..."
-# Defining the vscode variable with the path to the VSCode executable
-vscode_path=$(ls -td ~/.vscode-server/bin/*/bin/remote-cli/code | head -1)
-vscode="$vscode_path"
-
-# Append vscode path to .bashrc for future use
-echo 'alias code="'$vscode'"' >> ~/.bashrc
-echo 'export PATH="/root/.local/bin:$PATH"' >> ~/.bashrc
-
-# Update the system and install jq
-sudo apt-get update
-sudo apt-get install -y jq
-
-# Install recommended VSCode extensions
-jq -r '.recommendations[]' ~/.vscode-server/extensions/extensions.json | while read extension; do "$vscode" --install-extension "$extension"; done
+echo "Setup Complete"
