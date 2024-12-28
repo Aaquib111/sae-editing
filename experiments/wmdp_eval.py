@@ -26,7 +26,6 @@ model = AutoModelForCausalLM.from_pretrained("google/gemma-2-9b").to('cuda')
 import itertools
 
 wmdp = pd.read_parquet("hf://datasets/cais/wmdp/wmdp-bio/test-00000-of-00001.parquet")
-owt = load_dataset("Skylion007/openwebtext", streaming=True)
 
 # Duplicate each row 3 more times
 rep_wmdp = wmdp.loc[wmdp.index.repeat(4)].reset_index(drop=True)
@@ -57,7 +56,7 @@ rep_wmdp['prompt'] = rep_wmdp.apply(
 rep_wmdp['prompt_tok_len'] = rep_wmdp['prompt'].apply(lambda x: len(tokenizer(x, add_special_tokens=False)['input_ids']))
 
 # %%
-rep_wmdp = rep_wmdp[rep_wmdp['prompt_tok_len'] < 200]
+rep_wmdp = rep_wmdp[rep_wmdp['prompt_tok_len'] < 200].reset_index(drop=True)
 
 # %%
 # In batches of 50 at a time, run the model on the prompts
@@ -77,7 +76,8 @@ with torch.no_grad():
         mcqa = [tokenizer.decode(p) for p in preds]
         preds_list.extend(mcqa)
 
-rep_wmdp['pred'] = preds_list
+for j in range(len(preds_list)):
+    rep_wmdp.at[j, 'pred'] = preds_list[j]
 
 # %%
 rep_wmdp.to_csv('wmdp_bio_gemma-2-9b.csv', index=False)
