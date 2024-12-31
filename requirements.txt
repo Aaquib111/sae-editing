@@ -15,7 +15,6 @@ openai
 pandas
 peft
 tqdm
-transformer-lens
 transformers
 vllm
 wandb

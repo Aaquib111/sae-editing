@@ -28,12 +28,14 @@ git config --global user.email "philliphguo@gmail.com"
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 pip install -r requirements.txt
 python -m ipykernel install --user --name=sae
+conda install -y -c conda-forge ipywidgets jupyterlab_widgets nodejs
 
+git clone https://github.com/magikarp01/tasks.git
 
 # Source the .env file
 set -a
 source .env
-set +a
+
 
 # Login to HuggingFace more securely
 huggingface-cli login --token $HF_ACCESS_TOKEN
@@ -42,8 +44,6 @@ huggingface-cli login --token $HF_ACCESS_TOKEN
 # WandB automatically picks up WANDB_API_KEY from environment, no need to pass it explicitly
 wandb login
 
-
-git clone https://github.com/magikarp01/tasks.git
 # python -m venv venv
 # source venv/bin/activate
 # pip install -r requirements.txt
