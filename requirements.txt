@@ -18,5 +18,5 @@ tqdm
 transformers
 vllm
 wandb
-sae-lens==0.2.21
+sae-lens
 bitsandbytes
